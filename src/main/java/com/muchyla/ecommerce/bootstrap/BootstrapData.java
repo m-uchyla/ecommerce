@@ -34,8 +34,12 @@ public class BootstrapData implements ApplicationRunner {
 		Role role = new Role("ADMIN");
 		roleRepository.save(role);
 		
+		Role role1 = new Role("USER");
+		Role savedRole = roleRepository.save(role1);
+		
 		User user = new User("test", "test");
 		user.setPassword(encoder.encode(user.getPassword()));
+		user.getRoles().add(savedRole);
 		userService.saveUser(user);
 		
 	}
