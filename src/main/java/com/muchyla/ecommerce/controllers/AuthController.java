@@ -7,14 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class TestController {
+@RequestMapping("/auth")
+public class AuthController {
 
-	@GetMapping("/test")public String test() {return "testPageTh";}
+	@GetMapping("/login")
+		public String getLoginPage() {return "loginPageTh";}
 	
 	@GetMapping("/oauth2/code/google")
-	public String getCreditentialsFromGoogle(OAuth2AuthenticationToken auth) {
-		OAuth2User user = auth.getPrincipal();
-		System.out.println(user.toString());
-		return "redirect:/test";
-	}
+		public String getCreditentialsFromGoogle(OAuth2AuthenticationToken auth) {
+			OAuth2User user = auth.getPrincipal();
+			System.out.println(user.toString());
+			return "redirect:/test";
+		}
+	
 }
