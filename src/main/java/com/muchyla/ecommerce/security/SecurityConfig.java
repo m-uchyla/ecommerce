@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -38,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http
 		.authorizeRequests()
-			.antMatchers("/**/*.jsp","/**/*.js","/**/*.css","/**/*.png","/auth/**","/", "/resources/**").permitAll()
+			.antMatchers("/**/*.html","/**/*.js","/**/*.css","/**/*.png","/auth/**","/", "/resources/**","/oauth2/authorization/google").permitAll()
 			.antMatchers("/admin").hasRole("ADMIN")
 			.antMatchers("/user").hasRole("USER")
 			.anyRequest().authenticated()
@@ -55,11 +57,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("JSESSIONID")
 			.logoutSuccessUrl("/auth/login")
 			.and()
+		.oauth2Login()
+			.successHandler(successHandler())
+			.and()
 		.csrf()
 			.disable()
 		.httpBasic()
 			.and()
 		.headers().frameOptions().disable();
-		
+	}
+	
+	private AuthenticationSuccessHandler successHandler() {
+		SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
+			handler.setDefaultTargetUrl("/oauth2/code/google");
+			handler.setUseReferer(false);
+		return handler;
 	}
 }
