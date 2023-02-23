@@ -21,6 +21,7 @@ public class User {
 	private Long id;
 	
 	private String username;
+	private String email;
 	private String password;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -32,9 +33,10 @@ public class User {
 	
 	public User() {}
 
-	public User(String username, String password) {
+	public User(String username, String email, String password) {
 		super();
 		this.username = username;
+		this.email = email;
 		this.password = password;
 		this.roles = new HashSet<Role>();
 	}
@@ -69,6 +71,20 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", roles="
+				+ roles + "]";
 	}
 	
 }

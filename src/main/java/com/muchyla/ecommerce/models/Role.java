@@ -1,5 +1,7 @@
 package com.muchyla.ecommerce.models;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -41,7 +43,27 @@ public class Role implements GrantedAuthority {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-	
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, roleName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Role other = (Role) obj;
+		return Objects.equals(id, other.id) && Objects.equals(roleName, other.roleName);
+	}
+
+	@Override
+	public String toString() {
+		return "Role [id=" + id + ", roleName=" + roleName + "]";
+	}
 
 }

@@ -11,20 +11,19 @@ import com.muchyla.ecommerce.models.Role;
 import com.muchyla.ecommerce.models.User;
 import com.muchyla.ecommerce.repositories.RoleRepository;
 import com.muchyla.ecommerce.security.DefaultUserDetailsService;
+import com.muchyla.ecommerce.services.IUserService;
 
 @Profile("!test")
 @Component
 public class BootstrapData implements ApplicationRunner {
 	
-	private DefaultUserDetailsService userService;
+	private IUserService userService;
 	
-	@Autowired
-	private PasswordEncoder encoder;
 	@Autowired
 	RoleRepository roleRepository;
 	
 	@Autowired
-	public BootstrapData(DefaultUserDetailsService userService) {
+	public BootstrapData(IUserService userService) {
 		this.userService = userService;
 	}
 
@@ -37,11 +36,10 @@ public class BootstrapData implements ApplicationRunner {
 		Role role1 = new Role("USER");
 		Role savedRole = roleRepository.save(role1);
 		
-		User user = new User("test", "test");
-		user.setPassword(encoder.encode(user.getPassword()));
+		User user = userService.addUser("test", "test@test.com", "test");
 		user.getRoles().add(savedRole);
-		userService.saveUser(user);
-		
+		user =  userService.updateUser(user);
+		System.out.println("\n"+user.toString());
 	}
 
 }
