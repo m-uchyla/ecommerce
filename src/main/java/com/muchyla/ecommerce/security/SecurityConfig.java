@@ -17,9 +17,9 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private UserDetailsService userDetailsService;
+	private DefaultUserDetailsService userDetailsService;
 
-	public SecurityConfig(UserDetailsService userDetailsService) {
+	public SecurityConfig(DefaultUserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
 	

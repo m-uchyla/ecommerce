@@ -1,5 +1,6 @@
 package com.muchyla.ecommerce.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.muchyla.ecommerce.models.User;
 import com.muchyla.ecommerce.repositories.UserRepository;
+import com.muchyla.ecommerce.security.PasswordGenerator;
+import com.muchyla.ecommerce.security.UserPricipal;
 
 @Service
 public class UserService implements IUserService {
@@ -30,6 +33,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public User addUser(String username, String email, String password) {
+		System.out.println("===== USER CREATION");
 		return userRepository.save(new User(username, email, passwordEncoder.encode(password)));
 	}
 
@@ -41,6 +45,26 @@ public class UserService implements IUserService {
 	@Override
 	public User getUserByEmail(String email) {
 		return returnOptionalUser(userRepository.findByEmail(email));
+	}
+
+	@Override
+	public UserPricipal loadGoogleUser(String email, String username) {
+		User user = returnOptionalUser(userRepository.findByEmail(email));
+		if(user == null) {
+			user = addUser(username, email, (new PasswordGenerator.PasswordGeneratorBuilder().useDigits(true).useLower(true).useUpper(true).build().generate(30)));
+		}
+		return new UserPricipal(user);
+	}
+
+	@Override
+	public List<User> getUsersList() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public User getUserByPrincipal(UserPricipal userPricipal) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
