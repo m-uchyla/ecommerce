@@ -23,6 +23,7 @@ public class User {
 	private String username;
 	private String email;
 	private String password;
+	private boolean isTwoFactorEnabled;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
@@ -39,6 +40,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.roles = new HashSet<Role>();
+		this.isTwoFactorEnabled = false;
 	}
 
 	public Long getId() {
@@ -79,6 +81,14 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public boolean isTwoFactorEnabled() {
+		return isTwoFactorEnabled;
+	}
+
+	public void setTwoFactorEnabled(boolean isTwoFactorEnabled) {
+		this.isTwoFactorEnabled = isTwoFactorEnabled;
 	}
 
 	@Override

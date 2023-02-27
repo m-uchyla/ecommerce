@@ -38,6 +38,7 @@ public class BootstrapData implements ApplicationRunner {
 		
 		User user = userService.addUser("test", "test@test.com", "test");
 		user.getRoles().add(savedRole);
+		user.setTwoFactorEnabled(true);
 		user =  userService.updateUser(user);
 		System.out.println("\n"+user.toString());
 	}

@@ -9,16 +9,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.muchyla.ecommerce.models.User;
 import com.muchyla.ecommerce.security.UserPricipal;
+import com.muchyla.ecommerce.services.ITwoFactorCodeService;
 import com.muchyla.ecommerce.services.IUserService;
 
 @Controller
 public class AuthController {
 	
 	private IUserService userService;
+	private ITwoFactorCodeService twoFactorService;
 	
-	public AuthController(IUserService userService) {
+	public AuthController(IUserService userService,ITwoFactorCodeService twoFactorService) {
 		this.userService = userService;
+		this.twoFactorService = twoFactorService;
 	}
 
 	@GetMapping("/auth/login")
@@ -32,6 +36,17 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
 		return "redirect:/test";
+	}
+	
+	@GetMapping("/twoFactorAuth")
+	public String getTwoFactorPage() {
+		User user = userService.getLoggedUser();
+		if(!user.isTwoFactorEnabled()) {
+			return "redirect:/test";
+		}else {
+			System.out.println(twoFactorService.generateCode(user).toString()); 
+			return "twoFactorPage";
+		}
 	}
 	
 }
