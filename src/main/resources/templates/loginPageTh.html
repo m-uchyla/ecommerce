@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="ISO-8859-1">
 		<title>Login</title>
@@ -11,5 +11,6 @@
                <input type="password" id="password" name="password" placeholder="Password" />
                <button type="submit">Login</button>
            </form>
+           <a th:href="@{/oauth2/authorization/google}">Login via Google</a>
     </body>
 </html>

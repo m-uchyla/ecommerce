@@ -1,8 +1,10 @@
 package com.muchyla.ecommerce.services;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,9 +64,14 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User getUserByPrincipal(UserPricipal userPricipal) {
-		// TODO Auto-generated method stub
-		return null;
+	public User getUserByPrincipal(Object principal) {
+		UserPricipal userPricipal = (UserPricipal) principal;
+		return userPricipal.getUser();
+	}
+
+	@Override
+	public User getLoggedUser() {
+		return getUserByPrincipal(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 	}
 	
 }
