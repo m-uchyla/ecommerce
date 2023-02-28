@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.muchyla.ecommerce.models.User;
 import com.muchyla.ecommerce.repositories.UserRepository;
 import com.muchyla.ecommerce.security.PasswordGenerator;
+import com.muchyla.ecommerce.security.RoleService;
 import com.muchyla.ecommerce.security.UserPricipal;
 
 @Service
@@ -18,14 +19,16 @@ public class UserService implements IUserService {
 
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
+	private RoleService roleService;
+	
+	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
+		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.roleService = roleService;
+	}
 	
 	protected User returnOptionalUser(Optional<User> optUser) {
 		return (optUser.isPresent()) ? optUser.get() : null;
-	}
-	
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -35,8 +38,9 @@ public class UserService implements IUserService {
 
 	@Override
 	public User addUser(String username, String email, String password) {
-		System.out.println("===== USER CREATION");
-		return userRepository.save(new User(username, email, passwordEncoder.encode(password)));
+		User user = new User(username, email, passwordEncoder.encode(password));
+		user.getRoles().add(roleService.getRoleByName("USER"));
+		return userRepository.save(user);
 	}
 
 	@Override
