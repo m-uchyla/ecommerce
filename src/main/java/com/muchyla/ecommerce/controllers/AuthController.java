@@ -7,7 +7,9 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.muchyla.ecommerce.models.User;
 import com.muchyla.ecommerce.security.UserPricipal;
@@ -47,6 +49,11 @@ public class AuthController {
 			System.out.println(twoFactorService.generateCode(user).toString()); 
 			return "twoFactorPage";
 		}
+	}
+	
+	@PostMapping("/twoFactorAuth")
+	public String twoFactorAuth(@RequestParam("code")Long twoFactorCode) {
+		return (twoFactorService.checkCode(userService.getLoggedUser(), twoFactorCode)) ? "redirect:/test" : "redirect:/twoFactorAuth";
 	}
 	
 }

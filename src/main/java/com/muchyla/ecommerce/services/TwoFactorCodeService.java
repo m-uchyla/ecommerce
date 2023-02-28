@@ -25,7 +25,13 @@ public class TwoFactorCodeService implements ITwoFactorCodeService {
 	@Override
 	public TwoFactorCode generateCode(User user) {
 		TwoFactorCode twoFactorCode = getFromOptional(twoFactorCodeRepository.findByOwner(user));
-		if(twoFactorCode != null) twoFactorCodeRepository.deleteById(twoFactorCode.getId());
+		if(twoFactorCode != null) {
+			if(twoFactorCode.getDeadlineDate().before(new Date())) {
+				twoFactorCodeRepository.deleteById(twoFactorCode.getId());
+			}else if(twoFactorCode.getDeadlineDate().after(new Date())) {
+				return twoFactorCode;
+			}	
+		}
 		Long id;
 		do {
 			id = Math.round(Math.random() * (99999 - 10000 + 1) + 10000);
