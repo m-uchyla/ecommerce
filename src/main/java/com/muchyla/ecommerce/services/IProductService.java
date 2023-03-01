@@ -6,6 +6,8 @@ import com.muchyla.ecommerce.models.Product;
 
 public interface IProductService {
 	
+	List<Product> getAllProducts();
+	
 	Product createProduct(String name, String description, String category, Double price, Integer stock);
 	
 	Product getProductByName(String name);

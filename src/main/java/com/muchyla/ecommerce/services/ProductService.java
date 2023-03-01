@@ -49,4 +49,9 @@ public class ProductService implements IProductService {
 		productRepository.save(product);
 		return true;
 	}
+
+	@Override
+	public List<Product> getAllProducts() {
+		return productRepository.findAll();
+	}
 }
