@@ -37,14 +37,14 @@ public class AuthController {
 		Authentication auth = new UsernamePasswordAuthenticationToken(pricipal, pricipal.getPassword(), pricipal.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
-		return "redirect:/test";
+		return "redirect:/products";
 	}
 	
 	@GetMapping("/twoFactorAuth")
 	public String getTwoFactorPage() {
 		User user = userService.getLoggedUser();
 		if(!user.isTwoFactorEnabled()) {
-			return "redirect:/test";
+			return "redirect:/products";
 		}else {
 			System.out.println(twoFactorService.generateCode(user).toString()); 
 			return "twoFactorPage";
